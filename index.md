@@ -1,4 +1,4 @@
-## Resilient Distributed Datasets
+# Resilient Distributed Datasets
 Why in paper it says that "keeping data in memory can improve performance by an order of magnitude"?
 * improve performance by an order of magnitude = the performance is improved by a factor of 10
 * The reason that keeping data in memory can improve performance by an order of magnitude is that memory access times are much faster than disk access times. When data is stored in memory, it can be accessed directly by the CPU, whereas when it is stored on disk, it must be read from the disk into memory, which can take orders of magnitude longer.

@@ -1,3 +1,18 @@
+# Golang basic
+How compiler knows which variable to protect
+* In Go, the compiler automatically performs escape analysis, which determines whether a variable should be allocated on the stack or the heap. The stack is faster than the heap because it doesn't require the use of the garbage collector, so the compiler will attempt to allocate variables on the stack whenever possible.
+
+If a variable is used within a goroutine or is passed as an argument to a function that may be called concurrently, the compiler will allocate the variable on the heap instead, and the Go runtime will use its internal mechanisms (such as mutexes or channels) to synchronize access to that variable to ensure that concurrent access is safe. In other words, the compiler doesn't know which variables need protection, but it knows which variables might be accessed concurrently based on their usage in the program, and allocates them on the heap and adds the necessary synchronization code to ensure correct behavior.
+
+sync.mutex
+* used to ensure that only one goroutine can access a shared resource at a time
+
+sync.WaitGroup
+* used to wait for a group of goroutines to complete before proceeding.  
+* wg.Add(d int): add d to wg counter
+* wg.Done(): counter--
+* wg.Wait(): blocks the process until counter==0
+
 # Resilient Distributed Datasets
 Why in paper it says that "keeping data in memory can improve performance by an order of magnitude"?
 * improve performance by an order of magnitude = the performance is improved by a factor of 10

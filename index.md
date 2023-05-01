@@ -30,3 +30,31 @@ main challenge in designing RDDs
 transformations
 *  RDDs can only be created through deterministic operations on either (1) data in stable storage or (2) other RDDs.
 *  Examples of transformations include map, filter, and join.
+
+# Raft
+What is PrevLogIndex & PrevLogTerm
+* PrevLogIndex represents the index of the log entry immediately preceding the new entries that the leader is attempting to append. In other words, PrevLogIndex points to the last log entry that the leader and its followers agree upon.
+* If the follower's log does not contain an entry at the index indicated by PrevLogIndex, or if the term of the entry at that index does not match the term included in the leader's AppendEntries message, then the follower will refuse to append the new entries and instead respond with a rejection message.
+* PrevLogTerm is a field that appears in AppendEntries messages sent by the leader to replicate log entries to its followers. 
+* Example:
+A's log: [1, 2, 3, 4, 5]
+B's log: [1, 2, 3]
+* Node A sends an AppendEntries message to Node B with the following information:
+
+PrevLogIndex = 2 (the index of the last log entry that Node A and Node B agree upon)
+PrevLogTerm = 2 (the term of the log entry at PrevLogIndex)
+Entries = [4, 5] (the new entries that Node A wants to append to its log)
+
+* When Node B receives the AppendEntries message, it checks its own log to see if it has an entry at index 2 with term 2. 
+B's log: [1, 2, 3]
+              ^  ^
+              |  |--- index 2 (term = 2)
+              |------ PrevLogIndex
+
+What is commitIndex & lastApplied
+
+What is nextIndex & matchIndex (leader)
+* they are all maps
+* nextIndex: node ID -> next time the index leader should send to that node /  leader believes that follower's log contains entries up to index nextIndex-1
+* when leader sending entries to node i, it will include the entries starting from nextIndex[i]. If fail, leader will decrease nextIndex[i].
+* matchIndex: node ID -> the highest index in the leader's log that follower i has replicated
